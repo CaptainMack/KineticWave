@@ -432,5 +432,18 @@ void sendPositionJSON()  {
       Serial.print("}");
 }
 
-
+void goToSpecificPosition(int pos)  {
+ board1.goTo(pos);
+ board2.goTo(pos);
+ board3.goTo(pos);
+ board4.goTo(pos);
+ board5.goTo(pos);
+ board6.goTo(pos);
+ board7.goTo(pos);
+ board8.goTo(pos);
+ board9.goTo(pos);
+ board10.goTo(pos);
+ board11.goTo(pos);
+ board12.goTo(pos);
+}
 
