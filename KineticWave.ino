@@ -18,7 +18,7 @@ AutoDriver board11(40, 22, 23);
 AutoDriver board12(41, 22, 23);
 
 //Variables
-int a = 0;
+int a = 0; //Stepper-motor delay function. Only invoked at startup
 int amplitude = 3000;
 int startPosition = 6000; //Start position have to be AT LEAST twice the number of steps of the amplitude.
 
@@ -36,7 +36,7 @@ void setup()
   board1.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board1.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board1.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board1.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board1.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board1.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board1.setSwitchMode(SW_USER);    // Switch is not hard stop
   board1.setOscMode(INT_16MHZ_OSCOUT_16MHZ); // for board1, we want 16MHz.
@@ -51,7 +51,7 @@ void setup()
   board2.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board2.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board2.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board2.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board2.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board2.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board2.setSwitchMode(SW_USER);    // Switch is not hard stop
   board2.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board2, we want 16MHz (inverted).
@@ -66,7 +66,7 @@ void setup()
   board3.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board3.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board3.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board3.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board3.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board3.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board3.setSwitchMode(SW_USER);    // Switch is not hard stop
   board3.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board3, we want 16MHz (inverted).
@@ -81,7 +81,7 @@ void setup()
   board4.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board4.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board4.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board4.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board4.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board4.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board4.setSwitchMode(SW_USER);    // Switch is not hard stop
   board4.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board4, we want 16MHz (inverted).
@@ -96,7 +96,7 @@ void setup()
   board5.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board5.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board5.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board5.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board5.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board5.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board5.setSwitchMode(SW_USER);    // Switch is not hard stop
   board5.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board5, we want 16MHz (inverted).
@@ -111,7 +111,7 @@ void setup()
   board6.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board6.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board6.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board6.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board6.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board6.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board6.setSwitchMode(SW_USER);    // Switch is not hard stop
   board6.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board6, we want 16MHz (inverted).
@@ -126,7 +126,7 @@ void setup()
   board7.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board7.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board7.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board7.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board7.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board7.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board7.setSwitchMode(SW_USER);    // Switch is not hard stop
   board7.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board7, we want 16MHz (inverted).
@@ -141,7 +141,7 @@ void setup()
   board8.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board8.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board8.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board8.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board8.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board8.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board8.setSwitchMode(SW_USER);    // Switch is not hard stop
   board8.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board8, we want 16MHz (inverted).
@@ -156,7 +156,7 @@ void setup()
   board9.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board9.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board9.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board9.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board9.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board9.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board9.setSwitchMode(SW_USER);    // Switch is not hard stop
   board9.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board9, we want 16MHz (inverted).
@@ -171,7 +171,7 @@ void setup()
   board10.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board10.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board10.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board10.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board10.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board10.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board10.setSwitchMode(SW_USER);    // Switch is not hard stop
   board10.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board10, we want 16MHz (inverted).
@@ -186,7 +186,7 @@ void setup()
   board11.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board11.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board11.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board11.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board11.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board11.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board11.setSwitchMode(SW_USER);    // Switch is not hard stop
   board11.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board11, we want 16MHz (inverted).
@@ -201,7 +201,7 @@ void setup()
   board12.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
   board12.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
   board12.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
-  board12.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
+  board12.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board12.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board12.setSwitchMode(SW_USER);    // Switch is not hard stop
   board12.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board12, we want 16MHz (inverted).*/
