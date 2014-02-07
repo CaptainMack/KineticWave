@@ -20,7 +20,7 @@ AutoDriver board12(41, 22, 23);
 //Variables
 int a = 0;
 int amplitude = 3000;
-int startPosition = 6000;
+int startPosition = 6000; //Start position have to be AT LEAST twice the number of steps of the amplitude.
 
 void setup()
 {
@@ -29,7 +29,7 @@ void setup()
   board1.resetDev();
   board1.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board1.configStepMode(STEP_FS);   // 0 microsteps per step
-  board1.setMaxSpeed(300);        // 10000 steps/s max
+  board1.setMaxSpeed(300);        // max step/s
   board1.setFullSpeed(300);       // microstep below 10000 steps/s
   board1.setAcc(30);             // accelerate at 10000 steps/s/s
   board1.setDec(30);
@@ -44,7 +44,7 @@ void setup()
   board2.resetDev();
   board2.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board2.configStepMode(STEP_FS);   // 0 microsteps per step
-  board2.setMaxSpeed(300);        // 10000 steps/s max
+  board2.setMaxSpeed(300);        // max step/s
   board2.setFullSpeed(300);       // microstep below 10000 steps/s
   board2.setAcc(30);             // accelerate at 10000 steps/s/s
   board2.setDec(30);
@@ -59,7 +59,7 @@ void setup()
   board3.resetDev();
   board3.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board3.configStepMode(STEP_FS);   // 0 microsteps per step
-  board3.setMaxSpeed(300);        // 10000 steps/s max
+  board3.setMaxSpeed(300);        // max step/s
   board3.setFullSpeed(300);       // microstep below 10000 steps/s
   board3.setAcc(30);             // accelerate at 10000 steps/s/s
   board3.setDec(30);
@@ -74,7 +74,7 @@ void setup()
   board4.resetDev();
   board4.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board4.configStepMode(STEP_FS);   // 0 microsteps per step
-  board4.setMaxSpeed(300);        // 10000 steps/s max
+  board4.setMaxSpeed(300);        // max step/s
   board4.setFullSpeed(300);       // microstep below 10000 steps/s
   board4.setAcc(30);             // accelerate at 10000 steps/s/s
   board4.setDec(30);
@@ -89,7 +89,7 @@ void setup()
   board5.resetDev();
   board5.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board5.configStepMode(STEP_FS);   // 0 microsteps per step
-  board5.setMaxSpeed(300);        // 10000 steps/s max
+  board5.setMaxSpeed(300);        // max step/s
   board5.setFullSpeed(300);       // microstep below 10000 steps/s
   board5.setAcc(30);             // accelerate at 10000 steps/s/s
   board5.setDec(30);
@@ -104,7 +104,7 @@ void setup()
   board6.resetDev();
   board6.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board6.configStepMode(STEP_FS);   // 0 microsteps per step
-  board6.setMaxSpeed(300);        // 10000 steps/s max
+  board6.setMaxSpeed(300);        // max step/s
   board6.setFullSpeed(300);       // microstep below 10000 steps/s
   board6.setAcc(30);             // accelerate at 10000 steps/s/s
   board6.setDec(30);
@@ -119,7 +119,7 @@ void setup()
   board7.resetDev();
   board7.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board7.configStepMode(STEP_FS);   // 0 microsteps per step
-  board7.setMaxSpeed(300);        // 10000 steps/s max
+  board7.setMaxSpeed(300);        // max step/s
   board7.setFullSpeed(300);       // microstep below 10000 steps/s
   board7.setAcc(30);             // accelerate at 10000 steps/s/s
   board7.setDec(30);
@@ -134,7 +134,7 @@ void setup()
   board8.resetDev();
   board8.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board8.configStepMode(STEP_FS);   // 0 microsteps per step
-  board8.setMaxSpeed(300);        // 10000 steps/s max
+  board8.setMaxSpeed(300);        // max step/s
   board8.setFullSpeed(300);       // microstep below 10000 steps/s
   board8.setAcc(30);             // accelerate at 10000 steps/s/s
   board8.setDec(30);
@@ -144,12 +144,12 @@ void setup()
   board8.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
   board8.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board8.setSwitchMode(SW_USER);    // Switch is not hard stop
-  board8.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board7, we want 16MHz (inverted).
+  board8.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board8, we want 16MHz (inverted).
       Serial.println("Initializing Board #9");
   board9.resetDev();
   board9.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board9.configStepMode(STEP_FS);   // 0 microsteps per step
-  board9.setMaxSpeed(300);        // 10000 steps/s max
+  board9.setMaxSpeed(300);        // max step/s
   board9.setFullSpeed(300);       // microstep below 10000 steps/s
   board9.setAcc(30);             // accelerate at 10000 steps/s/s
   board9.setDec(30);
@@ -159,12 +159,12 @@ void setup()
   board9.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
   board9.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board9.setSwitchMode(SW_USER);    // Switch is not hard stop
-  board9.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board7, we want 16MHz (inverted).
+  board9.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board9, we want 16MHz (inverted).
         Serial.println("Initializing Board #10");
   board10.resetDev();
   board10.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board10.configStepMode(STEP_FS);   // 0 microsteps per step
-  board10.setMaxSpeed(300);        // 10000 steps/s max
+  board10.setMaxSpeed(300);        // max step/s
   board10.setFullSpeed(300);       // microstep below 10000 steps/s
   board10.setAcc(30);             // accelerate at 10000 steps/s/s
   board10.setDec(30);
@@ -174,12 +174,12 @@ void setup()
   board10.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
   board10.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board10.setSwitchMode(SW_USER);    // Switch is not hard stop
-  board10.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board7, we want 16MHz (inverted).
+  board10.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board10, we want 16MHz (inverted).
         Serial.println("Initializing Board #11");
   board11.resetDev();
   board11.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board11.configStepMode(STEP_FS);   // 0 microsteps per step
-  board11.setMaxSpeed(300);        // 10000 steps/s max
+  board11.setMaxSpeed(300);        // max step/s
   board11.setFullSpeed(300);       // microstep below 10000 steps/s
   board11.setAcc(30);             // accelerate at 10000 steps/s/s
   board11.setDec(30);
@@ -189,12 +189,12 @@ void setup()
   board11.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
   board11.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board11.setSwitchMode(SW_USER);    // Switch is not hard stop
-  board11.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board7, we want 16MHz (inverted).
+  board11.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board11, we want 16MHz (inverted).
         Serial.println("Initializing Board #12");
   board12.resetDev();
   board12.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board12.configStepMode(STEP_FS);   // 0 microsteps per step
-  board12.setMaxSpeed(300);        // 10000 steps/s max
+  board12.setMaxSpeed(300);        // max step/s
   board12.setFullSpeed(300);       // microstep below 10000 steps/s
   board12.setAcc(30);             // accelerate at 10000 steps/s/s
   board12.setDec(30);
@@ -204,7 +204,7 @@ void setup()
   board12.setOCShutdown(OC_SD_ENABLE); //  shutdown on OC
   board12.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board12.setSwitchMode(SW_USER);    // Switch is not hard stop
-  board12.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board7, we want 16MHz (inverted).*/
+  board12.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board12, we want 16MHz (inverted).*/
       Serial.println("All Boards Initialized!");
 }
 
@@ -324,10 +324,13 @@ void loop()
      } else if (board12.getPos() == amplitude)  {
         board12.goHome();
     }
+    //sendPositionJSON();
 }
 
 //Functions
 
+
+//Invoked before start.
 void goToStartPosition()  {
   board1.move(FWD, startPosition);
   board2.move(FWD, startPosition);
@@ -343,6 +346,7 @@ void goToStartPosition()  {
   board12.move(FWD, startPosition);
 }
 
+//Invoked before shutdown
 void goToShutdownPosition()  {
   board1.goHome();
   board2.goHome();
@@ -357,7 +361,7 @@ void goToShutdownPosition()  {
   board11.goHome();
   board12.goHome();
 }
-
+//On-the-fly acceleration change
 void setAcceleration(int accValue)  {
   board1.setAcc(accValue);
   board2.setAcc(accValue);
@@ -372,7 +376,7 @@ void setAcceleration(int accValue)  {
   board11.setAcc(accValue);
   board12.setAcc(accValue);
 }
-
+//On-the-fly decceleration change
 void setDecceleration(int decValue)  {
   board1.setDec(decValue);
   board2.setDec(decValue);
