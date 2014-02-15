@@ -18,13 +18,348 @@ AutoDriver board11(40, 22, 23);
 AutoDriver board12(41, 22, 23);
 
 //Variables
-int a = 0; //Stepper-motor delay function. Only invoked at startup
-int amplitude = 3000;
-int startPosition = 6000; //Start position have to be AT LEAST twice the number of steps of the amplitude.
-
+int amplitude = 2000;
+int changingWave = 0;
+int lastSentMillis = 501;
+int startPosition = 300; //Start position have to be AT LEAST twice the number of steps of the amplitude.
+int serialData = 0;
+int startTime = 0;
+char incomingByte;
+int waveType = 0;
+int waveInclination = 0;
+int small = 1500;
+int medium = 3000;
+int large = 4500;
 void setup()
 {
+  // Initialize Serial Communication
   Serial.begin(9600);
+  Serial3.begin(9600);
+  //Initialize boards
+  
+  initializeBoards();
+  //Change settings on all boards
+  setMaxSpeed(150);
+  setAcc(50);
+  setDec(50);
+  //goToStartPosition();
+  //delay(5000);
+  //startTime = millis();
+}
+
+
+void loop()  {
+  //board1.run(REV,150);
+  //board2.run(REV,150);
+  //board3.run(REV,150);
+  //board4.run(REV,150);
+  //board5.run(REV,150);
+  //board6.run(REV,150);
+  //board7.run(REV,150);
+  //board8.run(REV,150);
+  //board9.run(REV,150);
+  //board10.run(REV,150);
+  //board11.run(REV,150); 
+  //board12.run(REV,150);
+  //sendPositionJSON();
+  createWave(2500, 2000); 
+  /*
+  if (changingWave = 0)  {
+    createWave(amplitude, waveType); 
+  }
+  */
+ 
+}
+
+//Functions
+
+
+void createWave(int ampl, int incl)  {
+  /*
+    if (board1.getPos() == 0 && (millis()-startTime) > (incl*1))  { 
+        board1.move(FWD, ampl);
+    } else if (board1.getPos() == ampl)  {
+          board1.goHome();  
+    }
+    if (board2.getPos() == 0 && (millis()-startTime) > (incl*2))  {
+        board2.move(FWD, ampl);
+    }  else if (board2.getPos() == ampl)  {
+          board2.goHome();
+    }
+    if (board3.getPos() == 0 && (millis()-startTime) > (incl*3))  {
+        board3.move(FWD, ampl);
+    }  else if (board3.getPos() == ampl)  {
+          board3.goHome();
+    }
+    if (board4.getPos() == 0 && (millis()-startTime) > (incl*4))  {
+        board4.move(FWD, ampl);
+    }  else if (board4.getPos() == ampl)  {
+          board4.goHome();
+    }
+    if (board5.getPos() == 0 && (millis()-startTime) > (incl*5))  {
+        board5.move(FWD, ampl);
+    }  else if (board5.getPos() == ampl)  {
+          board5.goHome();
+    }
+    if (board6.getPos() == 0 && (millis()-startTime) > (incl*6))  {
+        board6.move(FWD, ampl);
+   }   else if (board6.getPos() == ampl)  {
+          board6.goHome();
+    }
+    if (board7.getPos() == 0 && (millis()-startTime) > (incl*7))  {
+        board7.move(FWD, ampl);
+     } else if (board7.getPos() == ampl)  {
+        board7.goHome();
+    }
+    */
+    if (board8.getPos() == 0 && (millis()-startTime) > (incl*8))  {
+        board8.move(FWD, ampl);
+     } else if (board8.getPos() == ampl)  {
+      board8.goHome();
+    }
+    if (board9.getPos() == 0 && (millis()-startTime) > (incl*9))  {
+        board9.move(FWD, ampl);
+     } else if (board9.getPos() == ampl)  {
+        board9.goHome();
+    }
+    if (board10.getPos() == 0 && (millis()-startTime) > (incl*10))  {
+        board10.move(FWD, ampl);
+     } else if (board10.getPos() == ampl)  {
+        board10.goHome();
+    }
+    if (board11.getPos() == 0 && (millis()-startTime) > (incl*11))  {
+        board11.move(FWD, ampl);
+     } else if (board11.getPos() == ampl)  {
+        board11.goHome();
+    }
+   
+    if (board12.getPos() == 0 && (millis()-startTime) > (incl*12))  {
+        board12.move(FWD, ampl);
+     } else if (board12.getPos() == ampl)  {
+          board12.goHome();
+    }  
+}
+
+//Invoked before start.
+void goToStartPosition()  {
+  board1.move(FWD, startPosition);
+  board2.move(FWD, startPosition);
+  board3.move(FWD, startPosition);
+  board4.move(FWD, startPosition);
+  board5.move(FWD, startPosition);
+  board6.move(FWD, startPosition);
+  board7.move(FWD, startPosition);
+  board8.move(FWD, startPosition);
+  board9.move(FWD, startPosition);
+  board10.move(FWD, startPosition);
+  board11.move(FWD, startPosition);
+  board12.move(FWD, startPosition);
+  board1.resetPos();
+  board2.resetPos();
+  board3.resetPos();
+  board4.resetPos();
+  board5.resetPos();
+  board6.resetPos();
+  board7.resetPos();
+  board8.resetPos();
+  board9.resetPos();
+  board10.resetPos();
+  board11.resetPos();
+  board12.resetPos();
+}
+
+//Invoked before shutdown
+void goToShutdownPosition()  {
+  board1.goTo(-500);
+  board2.goTo(-500);
+  board3.goTo(-500);
+  board4.goTo(-500);
+  board5.goTo(-500);
+  board6.goTo(-500);
+  board7.goTo(-500);
+  board8.goTo(-500);
+  board9.goTo(-500);
+  board10.goTo(-500);
+  board11.goTo(-500);
+  board12.goTo(-500);
+}
+
+void goToHome()  {
+  board1.goHome();
+  board2.goHome();
+  board3.goHome();
+  board4.goHome();
+  board5.goHome();
+  board6.goHome();
+  board7.goHome();
+  board8.goHome();
+  board9.goHome();
+  board10.goHome();
+  board11.goHome();
+  board12.goHome();
+}
+//On-the-fly acceleration change
+void setAcc(int accValue)  {
+  board1.setAcc(accValue);
+  board2.setAcc(accValue);
+  board3.setAcc(accValue);
+  board4.setAcc(accValue);
+  board5.setAcc(accValue);
+  board6.setAcc(accValue);
+  board7.setAcc(accValue);
+  board8.setAcc(accValue);
+  board9.setAcc(accValue);
+  board10.setAcc(accValue);
+  board11.setAcc(accValue);
+  board12.setAcc(accValue);
+}
+//On-the-fly decceleration change
+void setDec(int decValue)  {
+  board1.setDec(decValue);
+  board2.setDec(decValue);
+  board3.setDec(decValue);
+  board4.setDec(decValue);
+  board5.setDec(decValue);
+  board6.setDec(decValue);
+  board7.setDec(decValue);
+  board8.setDec(decValue);
+  board9.setDec(decValue);
+  board10.setDec(decValue);
+  board11.setDec(decValue);
+  board12.setDec(decValue);
+}
+
+void sendPositionJSON()  {
+  if ((millis()-lastSentMillis) > 1) {
+      Serial3.print("{");
+      Serial3.print("'b1':");
+      Serial3.print(board1.getPos());
+      Serial3.print(",");
+      Serial3.print("'b2':");
+      Serial3.print(board2.getPos());
+      Serial3.print(",");
+      Serial3.print("'b3':");
+      Serial3.print(board3.getPos());
+      Serial3.print(",");
+      Serial3.print("'b4':");
+      Serial3.print(board4.getPos());
+      Serial3.print(",");
+      Serial3.print("'b5':");
+      Serial3.print(board5.getPos());
+      Serial3.print(",");
+      Serial3.print("'b6':");
+      Serial3.print(board6.getPos());
+      Serial3.print(",");
+      Serial3.print("'b7':");
+      Serial3.print(board7.getPos());
+      Serial3.print(",");
+      Serial3.print("'b8':");
+      Serial3.print(board8.getPos());
+      Serial3.print(",");
+      Serial3.print("'b9':");
+      Serial3.print(board9.getPos());
+      Serial3.print(",");
+      Serial3.print("'b10':");
+      Serial3.print(board10.getPos());
+      Serial3.print(",");
+      Serial3.print("'b11':");
+      Serial3.print(board11.getPos());
+      Serial3.print(",");
+      Serial3.print("'b12':");
+      Serial3.print(board12.getPos());
+      Serial3.println("}");
+      lastSentMillis = millis();
+  }
+}
+
+void sendStatusJSON()  {
+      Serial3.print("{");
+      Serial3.print("'b1':");
+      Serial3.print(board1.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b2':");
+      Serial3.print(board2.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b3':");
+      Serial3.print(board3.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b4':");
+      Serial3.print(board4.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b5':");
+      Serial3.print(board5.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b6':");
+      Serial3.print(board6.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b7':");
+      Serial3.print(board7.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b8':");
+      Serial3.print(board8.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b9':");
+      Serial3.print(board9.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b10':");
+      Serial3.print(board10.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b11':");
+      Serial3.print(board11.getStatus());
+      Serial3.print(",");
+      Serial3.print("'b12':");
+      Serial3.print(board12.getStatus());
+      Serial3.println("}");
+}
+
+void goToSpecificPosition(int pos)  {
+ board1.goTo(pos);
+ board2.goTo(pos);
+ board3.goTo(pos);
+ board4.goTo(pos);
+ board5.goTo(pos);
+ board6.goTo(pos);
+ board7.goTo(pos);
+ board8.goTo(pos);
+ board9.goTo(pos);
+ board10.goTo(pos);
+ board11.goTo(pos);
+ board12.goTo(pos);
+}
+
+void setMaxSpeed(int speed)  {
+  board1.setMaxSpeed(speed);
+  board1.setFullSpeed(speed);
+  board2.setMaxSpeed(speed);
+  board2.setFullSpeed(speed);
+  board3.setMaxSpeed(speed);
+  board3.setFullSpeed(speed);
+  board4.setMaxSpeed(speed);
+  board4.setFullSpeed(speed);
+  board5.setMaxSpeed(speed);
+  board5.setFullSpeed(speed);
+  board6.setMaxSpeed(speed);
+  board6.setFullSpeed(speed);
+  board7.setMaxSpeed(speed);
+  board7.setFullSpeed(speed);
+  board8.setMaxSpeed(speed);
+  board8.setFullSpeed(speed);
+  board9.setMaxSpeed(speed);
+  board9.setFullSpeed(speed);
+  board10.setMaxSpeed(speed);
+  board10.setFullSpeed(speed);
+  board11.setMaxSpeed(speed);
+  board11.setFullSpeed(speed);
+  board12.setMaxSpeed(speed);
+  board12.setFullSpeed(speed);
+}
+
+void setAmplitude(int amp)  {
+  amplitude = amp;
+}
+
+void initializeBoards()  {
+  //Start initializing each board
   Serial.println("Initializing Board #1");
   board1.resetDev();
   board1.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
@@ -115,7 +450,7 @@ void setup()
   board6.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board6.setSwitchMode(SW_USER);    // Switch is not hard stop
   board6.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board6, we want 16MHz (inverted).
-    Serial.println("Initializing Board #7");
+  Serial.println("Initializing Board #7");
   board7.resetDev();
   board7.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board7.configStepMode(STEP_FS);   // 0 microsteps per step
@@ -130,7 +465,7 @@ void setup()
   board7.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board7.setSwitchMode(SW_USER);    // Switch is not hard stop
   board7.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board7, we want 16MHz (inverted).
-      Serial.println("Initializing Board #8");
+  Serial.println("Initializing Board #8");
   board8.resetDev();
   board8.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board8.configStepMode(STEP_FS);   // 0 microsteps per step
@@ -145,7 +480,7 @@ void setup()
   board8.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board8.setSwitchMode(SW_USER);    // Switch is not hard stop
   board8.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board8, we want 16MHz (inverted).
-      Serial.println("Initializing Board #9");
+  Serial.println("Initializing Board #9");
   board9.resetDev();
   board9.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board9.configStepMode(STEP_FS);   // 0 microsteps per step
@@ -160,7 +495,7 @@ void setup()
   board9.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board9.setSwitchMode(SW_USER);    // Switch is not hard stop
   board9.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board9, we want 16MHz (inverted).
-        Serial.println("Initializing Board #10");
+  Serial.println("Initializing Board #10");
   board10.resetDev();
   board10.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board10.configStepMode(STEP_FS);   // 0 microsteps per step
@@ -175,7 +510,7 @@ void setup()
   board10.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board10.setSwitchMode(SW_USER);    // Switch is not hard stop
   board10.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board10, we want 16MHz (inverted).
-        Serial.println("Initializing Board #11");
+  Serial.println("Initializing Board #11");
   board11.resetDev();
   board11.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board11.configStepMode(STEP_FS);   // 0 microsteps per step
@@ -190,7 +525,7 @@ void setup()
   board11.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board11.setSwitchMode(SW_USER);    // Switch is not hard stop
   board11.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board11, we want 16MHz (inverted).
-        Serial.println("Initializing Board #12");
+  Serial.println("Initializing Board #12");
   board12.resetDev();
   board12.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
   board12.configStepMode(STEP_FS);   // 0 microsteps per step
@@ -205,245 +540,70 @@ void setup()
   board12.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board12.setSwitchMode(SW_USER);    // Switch is not hard stop
   board12.setOscMode(EXT_16MHZ_OSCOUT_INVERT); // for board12, we want 16MHz (inverted).*/
-      Serial.println("All Boards Initialized!");
+  Serial.println("All Boards Initialized - going to start-position!");
 }
 
+int receiveSerial()  {
+  if (Serial3.available() > 0) {
+          // read the incoming byte:
+     incomingByte = Serial3.read();
+     if (incomingByte > 0)  {
+         return incomingByte;
+     } else {
+        return 0; 
+     }
+  } 
+}
 
-void loop()
-{
+void changeWave(int type)  {
+  if (type != waveType)  {
+    changingWave = 1;
+    stopWave();
+    startNewWave(type);
+    waveType = type;
+  }
+}
+
+void stopWave()  {
+  board1.softStop();
+  board2.softStop();
+  board3.softStop();
+  board4.softStop();
+  board5.softStop();
+  board6.softStop();
+  board7.softStop();
+  board8.softStop();
+  board9.softStop();
+  board10.softStop();
+  board11.softStop();
+  board12.softStop();
+  while (allBusyCheck() == 1)  {
+   //do nothing
+  }
+  goToHome();
+  while (board1.getPos() != 0)  {
+   //do nothing
+  }
+}
+
+void startNewWave(int type)  {
+  if (type == 1 || type == 2)  {
+    waveInclination = small;
+    amplitude = 1000;
+  } else if (type == 1 || type == 2)  {
+    
   
-    if (board1.getPos() == 0)  { 
-        board1.move(FWD, amplitude);
-         if (a < 1) {
-           delay(1000);
-           a = 1;
-         }
-    } else if (board1.getPos() == amplitude)  {
-        board1.goHome();
-         if (a < 2) {
-           delay(1000);
-           a = 2;
-         }
-    }
-    if (board2.getPos() == 0)  {
-        board2.move(FWD, amplitude);
-         if (a < 3) {
-           delay(1000);
-           a = 3;
-         }
-    }  else if (board2.getPos() == amplitude)  {
-        board2.goHome();
-    }
-        if (board3.getPos() == 0)  {
-        board3.move(FWD, amplitude);
-         if (a < 4) {
-           delay(1000);
-           a = 4;
-         }
-    }  else if (board3.getPos() == amplitude)  {
-        board3.goHome();
-    }
-        if (board4.getPos() == 0)  {
-        board4.move(FWD, amplitude);
-         if (a < 5) {
-           delay(1000);
-           a = 5;
-         }
-    }  else if (board4.getPos() == amplitude)  {
-        board4.goHome();
-    }
-        if (board5.getPos() == 0)  {
-        board5.move(FWD, amplitude);
-         if (a < 6) {
-           delay(1000);
-           a = 6;
-         }
-    }  else if (board5.getPos() == amplitude)  {
-        board5.goHome();
-    }
-        if (board6.getPos() == 0)  {
-        board6.move(FWD, amplitude);
-         if (a < 7) {
-           delay(1000);
-           a = 7;
-         }
-   }   else if (board6.getPos() == amplitude)  {
-        board6.goHome();
-    }
-        if (board7.getPos() == 0)  {
-        board7.move(FWD, amplitude);
-         if (a < 8) {
-           delay(1000);
-           a = 8;
-         }
-     } else if (board7.getPos() == amplitude)  {
-        board7.goHome();
-    }
-            if (board8.getPos() == 0)  {
-        board8.move(FWD, amplitude);
-         if (a < 9) {
-           delay(1000);
-           a = 9;
-         }
-     } else if (board8.getPos() == amplitude)  {
-        board8.goHome();
-    }
-            if (board9.getPos() == 0)  {
-        board9.move(FWD, amplitude);
-         if (a < 10) {
-           delay(1000);
-           a = 10;
-         }
-     } else if (board9.getPos() == amplitude)  {
-        board9.goHome();
-    }
-            if (board10.getPos() == 0)  {
-        board10.move(FWD, amplitude);
-         if (a < 11) {
-           delay(1000);
-           a = 11;
-         }
-     } else if (board10.getPos() == amplitude)  {
-        board10.goHome();
-    }
-            if (board11.getPos() == 0)  {
-        board11.move(FWD, amplitude);
-         if (a < 12) {
-           delay(1000);
-           a = 12;
-         }
-     } else if (board11.getPos() == amplitude)  {
-        board11.goHome();
-    }
-            if (board12.getPos() == 0)  {
-        board12.move(FWD, amplitude);
-         if (a < 13) {
-           delay(1000);
-           a = 13;
-         }
-     } else if (board12.getPos() == amplitude)  {
-        board12.goHome();
-    }
-    //sendPositionJSON();
+  }
 }
 
-//Functions
+int allBusyCheck()  {
+  if (board1.busyCheck() == 1 && board2.busyCheck() == 1 && board3.busyCheck() == 1 && board4.busyCheck() == 1 && board5.busyCheck() == 1 && board6.busyCheck() == 1 && board7.busyCheck() == 1 && board8.busyCheck() == 1 && board9.busyCheck() == 1 && board10.busyCheck() == 1 && board11.busyCheck() == 1 && board12.busyCheck() == 1)  {
+    return 1;
+  } else  {
+    return 0;
+  }
+}
+/*
 
 
-//Invoked before start.
-void goToStartPosition()  {
-  board1.move(FWD, startPosition);
-  board2.move(FWD, startPosition);
-  board3.move(FWD, startPosition);
-  board4.move(FWD, startPosition);
-  board5.move(FWD, startPosition);
-  board6.move(FWD, startPosition);
-  board7.move(FWD, startPosition);
-  board8.move(FWD, startPosition);
-  board9.move(FWD, startPosition);
-  board10.move(FWD, startPosition);
-  board11.move(FWD, startPosition);
-  board12.move(FWD, startPosition);
-}
-
-//Invoked before shutdown
-void goToShutdownPosition()  {
-  board1.goHome();
-  board2.goHome();
-  board3.goHome();
-  board4.goHome();
-  board5.goHome();
-  board6.goHome();
-  board7.goHome();
-  board8.goHome();
-  board9.goHome();
-  board10.goHome();
-  board11.goHome();
-  board12.goHome();
-}
-//On-the-fly acceleration change
-void setAcceleration(int accValue)  {
-  board1.setAcc(accValue);
-  board2.setAcc(accValue);
-  board3.setAcc(accValue);
-  board4.setAcc(accValue);
-  board5.setAcc(accValue);
-  board6.setAcc(accValue);
-  board7.setAcc(accValue);
-  board8.setAcc(accValue);
-  board9.setAcc(accValue);
-  board10.setAcc(accValue);
-  board11.setAcc(accValue);
-  board12.setAcc(accValue);
-}
-//On-the-fly decceleration change
-void setDecceleration(int decValue)  {
-  board1.setDec(decValue);
-  board2.setDec(decValue);
-  board3.setDec(decValue);
-  board4.setDec(decValue);
-  board5.setDec(decValue);
-  board6.setDec(decValue);
-  board7.setDec(decValue);
-  board8.setDec(decValue);
-  board9.setDec(decValue);
-  board10.setDec(decValue);
-  board11.setDec(decValue);
-  board12.setDec(decValue);
-}
-
-void sendPositionJSON()  {
-      Serial.print("{");
-      Serial.print("'board1':");
-      Serial.print(board1.getPos());
-      Serial.print(",");
-      Serial.print("'board2':");
-      Serial.print(board2.getPos());
-      Serial.print(",");
-      Serial.print("'board3':");
-      Serial.print(board3.getPos());
-      Serial.print(",");
-      Serial.print("'board4':");
-      Serial.print(board4.getPos());
-      Serial.print(",");
-      Serial.print("'board5':");
-      Serial.print(board5.getPos());
-      Serial.print(",");
-      Serial.print("'board6':");
-      Serial.print(board6.getPos());
-      Serial.print(",");
-      Serial.print("'board7':");
-      Serial.print(board7.getPos());
-      Serial.print(",");
-      Serial.print("'board8':");
-      Serial.print(board8.getPos());
-      Serial.print(",");
-      Serial.print("'board9':");
-      Serial.print(board9.getPos());
-      Serial.print(",");
-      Serial.print("'board10':");
-      Serial.print(board10.getPos());
-      Serial.print(",");
-      Serial.print("'board11':");
-      Serial.print(board11.getPos());
-      Serial.print(",");
-      Serial.print("'board12':");
-      Serial.print(board12.getPos());
-      Serial.print("}");
-}
-
-void goToSpecificPosition(int pos)  {
- board1.goTo(pos);
- board2.goTo(pos);
- board3.goTo(pos);
- board4.goTo(pos);
- board5.goTo(pos);
- board6.goTo(pos);
- board7.goTo(pos);
- board8.goTo(pos);
- board9.goTo(pos);
- board10.goTo(pos);
- board11.goTo(pos);
- board12.goTo(pos);
-}
-
+*/
