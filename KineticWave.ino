@@ -30,6 +30,7 @@ int waveInclination = 0;
 int small = 1500;
 int medium = 3000;
 int large = 4500;
+int runOnce = 0;
 void setup()
 {
   // Initialize Serial Communication
@@ -62,12 +63,20 @@ void loop()  {
   //board11.run(REV,150); 
   //board12.run(REV,150);
   //sendPositionJSON();
-  createWave(2500, 2000); 
+  if (changingWave == 0)  {
+    createWave(2500, 2000); 
+  }
   /*
   if (changingWave = 0)  {
     createWave(amplitude, waveType); 
   }
   */
+  
+  if ((millis()-startTime) > 90000 && runOnce == 0) {
+    changingWave = 1;
+    stopWave();
+    runOnce = 1;
+  }
  
 }
 
@@ -75,7 +84,6 @@ void loop()  {
 
 
 void createWave(int ampl, int incl)  {
-  /*
     if (board1.getPos() == 0 && (millis()-startTime) > (incl*1))  { 
         board1.move(FWD, ampl);
     } else if (board1.getPos() == ampl)  {
@@ -111,7 +119,7 @@ void createWave(int ampl, int incl)  {
      } else if (board7.getPos() == ampl)  {
         board7.goHome();
     }
-    */
+    
     if (board8.getPos() == 0 && (millis()-startTime) > (incl*8))  {
         board8.move(FWD, ampl);
      } else if (board8.getPos() == ampl)  {
@@ -577,13 +585,15 @@ void stopWave()  {
   board10.softStop();
   board11.softStop();
   board12.softStop();
-  while (allBusyCheck() == 1)  {
-   //do nothing
+  while (board12.busyCheck() == 1)  {
+   Serial.print("BOARD BUSY: ");
+   Serial.println(board12.busyCheck());
   }
   goToHome();
-  while (board1.getPos() != 0)  {
-   //do nothing
-  }
+  //wait for them to go home
+  while (board12.getPos() != 0 && board11.getPos() != 0 && board10.getPos() != 0 && board9.getPos() != 0 && board8.getPos() != 0 && board7.getPos() != 0 && board6.getPos() != 0 && board5.getPos() != 0 && board4.getPos() != 0 && board3.getPos() != 0 && board2.getPos() != 0 && board1.getPos() != 0)  {}
+  
+  Serial.println("stopWave finished");
 }
 
 void startNewWave(int type)  {
