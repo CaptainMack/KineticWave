@@ -20,13 +20,13 @@ AutoDriver board12(41, 22, 23);
 //Variables
 int amplitude = 2000;
 int changingWave = 0;
-int lastSentMillis = 501;
+unsigned long lastSentMillis = 501;
 int startPosition = 300; //Start position have to be AT LEAST twice the number of steps of the amplitude.
 int serialData = 0;
-int startTime = 0;
+unsigned long startTime = 0;
 char incomingByte;
 int waveType = 0;
-int waveInclination = 0;
+int waveInclination = 2500;
 int small = 1500;
 int medium = 3000;
 int large = 4500;
@@ -63,18 +63,14 @@ void loop()  {
   //board11.run(REV,150); 
   //board12.run(REV,150);
   //sendPositionJSON();
-  if (changingWave == 0)  {
-    createWave(2500, 2000); 
-  }
-  /*
-  if (changingWave = 0)  {
-    createWave(amplitude, waveType); 
-  }
-  */
   
+  if (changingWave == 0)  {
+    createWave(amplitude, waveInclination); 
+  }
+  //Re-code to Serial.read (if serial.read != current wave type -> change wave!
   if ((millis()-startTime) > 90000 && runOnce == 0) {
     changingWave = 1;
-    stopWave();
+    changeWave(1);
     runOnce = 1;
   }
  
@@ -84,7 +80,16 @@ void loop()  {
 
 
 void createWave(int ampl, int incl)  {
-    if (board1.getPos() == 0 && (millis()-startTime) > (incl*1))  { 
+  Serial.print("AMP: ");
+  Serial.print(ampl);
+  Serial.print(" INCL: ");
+  Serial.print(incl);
+  Serial.print(" START-TIME: ");
+  Serial.print(startTime);
+  Serial.print(" MS: ");
+  Serial.println(millis());
+
+  if (board1.getPos() == 0 && (millis()-startTime) > (incl*1))  { 
         board1.move(FWD, ampl);
     } else if (board1.getPos() == ampl)  {
           board1.goHome();  
@@ -569,6 +574,8 @@ void changeWave(int type)  {
     stopWave();
     startNewWave(type);
     waveType = type;
+    startTime = millis();
+    changingWave = 0;
   }
 }
 
@@ -585,35 +592,33 @@ void stopWave()  {
   board10.softStop();
   board11.softStop();
   board12.softStop();
-  while (board12.busyCheck() == 1)  {
-   Serial.print("BOARD BUSY: ");
-   Serial.println(board12.busyCheck());
-  }
+  while (board12.busyCheck() == 1 && board11.busyCheck() == 1 && board10.busyCheck() == 1 && board9.busyCheck() == 1 && board8.busyCheck() == 1 && board7.busyCheck() == 1 && board6.busyCheck() == 1 && board5.busyCheck() == 1 && board4.busyCheck() == 1 && board3.busyCheck() == 1 && board2.busyCheck() == 1 && board1.busyCheck() == 1)  {}
   goToHome();
   //wait for them to go home
-  while (board12.getPos() != 0 && board11.getPos() != 0 && board10.getPos() != 0 && board9.getPos() != 0 && board8.getPos() != 0 && board7.getPos() != 0 && board6.getPos() != 0 && board5.getPos() != 0 && board4.getPos() != 0 && board3.getPos() != 0 && board2.getPos() != 0 && board1.getPos() != 0)  {}
-  
-  Serial.println("stopWave finished");
+  while (goHomeCheck())  {}
+}
+
+boolean goHomeCheck()  {
+ if (board12.getPos() == 0 && board11.getPos() == 0 && board10.getPos() == 0 && board9.getPos() == 0 && board8.getPos() == 0 && board7.getPos() == 0 && board6.getPos() == 0 && board5.getPos() == 0 && board4.getPos() == 0 && board3.getPos() == 0 && board2.getPos() == 0 && board1.getPos() == 0)  {
+   return false;
+  } else  {
+   return true;
+  }
 }
 
 void startNewWave(int type)  {
   if (type == 1 || type == 2)  {
     waveInclination = small;
     amplitude = 1000;
-  } else if (type == 1 || type == 2)  {
-    
-  
-  }
+    Serial.println("SMALL WAVE");
+  } else if (type == 3 || type == 4)  {
+    waveInclination = medium;
+    amplitude = 2000;
+    Serial.println("MEDIUM WAVE");
+  } else if (type == 5 || type == 6)  {
+    waveInclination = large;
+    amplitude = 3000;
+    Serial.println("LARGE WAVE");
+  } 
 }
 
-int allBusyCheck()  {
-  if (board1.busyCheck() == 1 && board2.busyCheck() == 1 && board3.busyCheck() == 1 && board4.busyCheck() == 1 && board5.busyCheck() == 1 && board6.busyCheck() == 1 && board7.busyCheck() == 1 && board8.busyCheck() == 1 && board9.busyCheck() == 1 && board10.busyCheck() == 1 && board11.busyCheck() == 1 && board12.busyCheck() == 1)  {
-    return 1;
-  } else  {
-    return 0;
-  }
-}
-/*
-
-
-*/
