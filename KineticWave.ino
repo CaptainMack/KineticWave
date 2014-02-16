@@ -35,7 +35,7 @@ void setup()
 {
   // Initialize Serial Communication
   Serial.begin(9600);
-  Serial3.begin(9600);
+  Serial3.begin(19200);
   //Initialize boards
   
   initializeBoards();
@@ -62,8 +62,8 @@ void loop()  {
   //board10.run(REV,150);
   //board11.run(REV,150); 
   //board12.run(REV,150);
-  //sendPositionJSON();
-  
+  sendPositionJSON();
+  /*
   if (changingWave == 0)  {
     createWave(amplitude, waveInclination); 
   }
@@ -73,7 +73,16 @@ void loop()  {
     changeWave(1);
     runOnce = 1;
   }
- 
+ */
+   // send data only when you receive data:
+  if (Serial.available() > 0) {
+          // read the incoming byte:
+          incomingByte = Serial.read();
+
+          // say what you got:
+          Serial.print("I received: ");
+          Serial.println(incomingByte);
+  }
 }
 
 //Functions
@@ -243,7 +252,7 @@ void setDec(int decValue)  {
 }
 
 void sendPositionJSON()  {
-  if ((millis()-lastSentMillis) > 1) {
+  if ((millis()-lastSentMillis) > 100) {
       Serial3.print("{");
       Serial3.print("'b1':");
       Serial3.print(board1.getPos());
@@ -282,6 +291,7 @@ void sendPositionJSON()  {
       Serial3.print(board12.getPos());
       Serial3.println("}");
       lastSentMillis = millis();
+      Serial.println("JSON SENT");
   }
 }
 
