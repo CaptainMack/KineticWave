@@ -10,7 +10,7 @@ AutoDriver board3(32, 22, 23);
 AutoDriver board4(33, 22, 23);
 AutoDriver board5(34, 22, 23);
 AutoDriver board6(35, 22, 23);
-AutoDriver board7(36, 22, 23);
+AutoDriver board7(42, 22, 23);
 AutoDriver board8(37, 22, 23);
 AutoDriver board9(38, 22, 23);
 AutoDriver board10(39, 22, 23);
@@ -28,8 +28,8 @@ char incomingByte;
 int waveType = 0;
 int waveInclination = 2500;
 int small = 1500;
-int medium = 3000;
-int large = 4500;
+int medium = 2500;
+int large = 3000;
 int runOnce = 0;
 void setup()
 {
@@ -45,11 +45,16 @@ void setup()
   setDec(50);
   //goToStartPosition();
   //delay(5000);
-  //startTime = millis();
+  startTime = millis();
 }
 
 
 void loop()  {
+  /*  ########################################
+      ################ DEBUG #################
+      ########################################
+  */  
+  
   //board1.run(REV,150);
   //board2.run(REV,150);
   //board3.run(REV,150);
@@ -62,42 +67,39 @@ void loop()  {
   //board10.run(REV,150);
   //board11.run(REV,150); 
   //board12.run(REV,150);
-  sendPositionJSON();
-  /*
-  if (changingWave == 0)  {
-    createWave(amplitude, waveInclination); 
-  }
+  //sendPositionJSON();
+  //createWave(amplitude, waveInclination); 
+    /*
   //Re-code to Serial.read (if serial.read != current wave type -> change wave!
-  if ((millis()-startTime) > 90000 && runOnce == 0) {
+  if (incomingByte != waveType) {
     changingWave = 1;
-    changeWave(1);
+    changeWave(incomingByte);
     runOnce = 1;
   }
  */
-   // send data only when you receive data:
-  if (Serial.available() > 0) {
-          // read the incoming byte:
-          incomingByte = Serial.read();
-
-          // say what you got:
-          Serial.print("I received: ");
-          Serial.println(incomingByte);
+  
+  //################# END DEBUG #############
+  
+  if (changingWave == 0)  {
+    createWave(amplitude, waveInclination); 
   }
+   // Read waveType data.
+  
+  if (Serial3.available() > 0) {
+          incomingByte = Serial3.read();
+            if (incomingByte != waveType && changingWave == 0) {
+              changingWave = 1;
+              changeWave(incomingByte);
+              runOnce = 1;
+            }
+  }
+  
 }
 
 //Functions
 
 
 void createWave(int ampl, int incl)  {
-  Serial.print("AMP: ");
-  Serial.print(ampl);
-  Serial.print(" INCL: ");
-  Serial.print(incl);
-  Serial.print(" START-TIME: ");
-  Serial.print(startTime);
-  Serial.print(" MS: ");
-  Serial.println(millis());
-
   if (board1.getPos() == 0 && (millis()-startTime) > (incl*1))  { 
         board1.move(FWD, ampl);
     } else if (board1.getPos() == ampl)  {
@@ -154,12 +156,13 @@ void createWave(int ampl, int incl)  {
      } else if (board11.getPos() == ampl)  {
         board11.goHome();
     }
-   
+   /*
     if (board12.getPos() == 0 && (millis()-startTime) > (incl*12))  {
         board12.move(FWD, ampl);
      } else if (board12.getPos() == ampl)  {
           board12.goHome();
     }  
+    */
 }
 
 //Invoked before start.
@@ -218,7 +221,7 @@ void goToHome()  {
   board9.goHome();
   board10.goHome();
   board11.goHome();
-  board12.goHome();
+  //board12.goHome();
 }
 //On-the-fly acceleration change
 void setAcc(int accValue)  {
@@ -252,7 +255,7 @@ void setDec(int decValue)  {
 }
 
 void sendPositionJSON()  {
-  if ((millis()-lastSentMillis) > 100) {
+  if ((millis()-lastSentMillis) > 500) {
       Serial3.print("{");
       Serial3.print("'b1':");
       Serial3.print(board1.getPos());
@@ -291,48 +294,32 @@ void sendPositionJSON()  {
       Serial3.print(board12.getPos());
       Serial3.println("}");
       lastSentMillis = millis();
-      Serial.println("JSON SENT");
   }
 }
 
-void sendStatusJSON()  {
-      Serial3.print("{");
-      Serial3.print("'b1':");
-      Serial3.print(board1.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b2':");
-      Serial3.print(board2.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b3':");
-      Serial3.print(board3.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b4':");
-      Serial3.print(board4.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b5':");
-      Serial3.print(board5.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b6':");
-      Serial3.print(board6.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b7':");
-      Serial3.print(board7.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b8':");
-      Serial3.print(board8.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b9':");
-      Serial3.print(board9.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b10':");
-      Serial3.print(board10.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b11':");
-      Serial3.print(board11.getStatus());
-      Serial3.print(",");
-      Serial3.print("'b12':");
-      Serial3.print(board12.getStatus());
-      Serial3.println("}");
+void boardStatus()  {
+      Serial.print("Board 1: ");
+      Serial.print(board1.getStatus());
+      Serial.print("Board 2: ");
+      Serial.print(board2.getStatus());
+      Serial.print("Board 3: ");
+      Serial.print(board3.getStatus());
+      Serial.print("Board 4: ");
+      Serial.print(board4.getStatus());
+      Serial.print("Board 5: ");
+      Serial.print(board5.getStatus());
+      Serial.print("Board 6: ");
+      Serial.print(board6.getStatus());
+      Serial.print("Board 7: ");
+      Serial.print(board7.getStatus());
+      Serial.print("Board 8: ");
+      Serial.print(board8.getStatus());
+      Serial.print("Board 9: ");
+      Serial.print(board9.getStatus());
+      Serial.print("Board 10: ");
+      Serial.print(board10.getStatus());
+      Serial.print("Board 11: ");
+      Serial.print(board11.getStatus());
 }
 
 void goToSpecificPosition(int pos)  {
@@ -397,7 +384,7 @@ void initializeBoards()  {
   board1.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board1.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
   board1.setSwitchMode(SW_USER);    // Switch is not hard stop
-  board1.setOscMode(INT_16MHZ_OSCOUT_16MHZ); // for board1, we want 16MHz.
+  board1.setOscMode(INT_16MHZ_OSCOUT_16MHZ); // for board1, we want 16MHz OSCOUT.
   Serial.println("Initializing Board #2");
   board2.resetDev();
   board2.configSyncPin(BUSY_PIN, 0);// BUSY pin low during operations; second paramter ignored.
@@ -557,7 +544,7 @@ void initializeBoards()  {
   board12.setAcc(30);             // accelerate at 10000 steps/s/s
   board12.setDec(30);
   board12.setSlewRate(SR_530V_us);   // Upping the edge speed increases torque.
-  board12.setOCThreshold(OC_1875mA);  // OC threshold 1875mA
+  board12.setOCThreshold(OC_2250mA);  // OC threshold 2250mA (for testing purposes)
   board12.setPWMFreq(PWM_DIV_2, PWM_MUL_2); // 31.25kHz PWM freq
   board12.setOCShutdown(OC_SD_ENABLE); //  shutdown on over-current
   board12.setVoltageComp(VS_COMP_DISABLE); // don't compensate for motor V
@@ -586,6 +573,7 @@ void changeWave(int type)  {
     waveType = type;
     startTime = millis();
     changingWave = 0;
+    runOnce = 0;
   }
 }
 
@@ -601,15 +589,17 @@ void stopWave()  {
   board9.softStop();
   board10.softStop();
   board11.softStop();
-  board12.softStop();
-  while (board12.busyCheck() == 1 && board11.busyCheck() == 1 && board10.busyCheck() == 1 && board9.busyCheck() == 1 && board8.busyCheck() == 1 && board7.busyCheck() == 1 && board6.busyCheck() == 1 && board5.busyCheck() == 1 && board4.busyCheck() == 1 && board3.busyCheck() == 1 && board2.busyCheck() == 1 && board1.busyCheck() == 1)  {}
+  while (board11.busyCheck() == 1 && board10.busyCheck() == 1 && board9.busyCheck() == 1 && board8.busyCheck() == 1 && board7.busyCheck() == 1 && board6.busyCheck() == 1 && board5.busyCheck() == 1 && board4.busyCheck() == 1 && board3.busyCheck() == 1 && board2.busyCheck() == 1 && board1.busyCheck() == 1)  {}
   goToHome();
+  Serial.println("GOING HOME");
   //wait for them to go home
   while (goHomeCheck())  {}
+  Serial.println("HOME");
 }
 
 boolean goHomeCheck()  {
- if (board12.getPos() == 0 && board11.getPos() == 0 && board10.getPos() == 0 && board9.getPos() == 0 && board8.getPos() == 0 && board7.getPos() == 0 && board6.getPos() == 0 && board5.getPos() == 0 && board4.getPos() == 0 && board3.getPos() == 0 && board2.getPos() == 0 && board1.getPos() == 0)  {
+ if (board11.getPos() == 0 && board10.getPos() == 0 && board9.getPos() == 0 && board8.getPos() == 0 && board7.getPos() == 0 && board6.getPos() == 0 && board5.getPos() == 0 && board4.getPos() == 0 && board3.getPos() == 0 && board2.getPos() == 0 && board1.getPos() == 0)  {
+   Serial.println("HOME CHECK DONE!");
    return false;
   } else  {
    return true;
@@ -617,18 +607,24 @@ boolean goHomeCheck()  {
 }
 
 void startNewWave(int type)  {
+  Serial.print("Starting new wave: ");
+  Serial.println(type);
   if (type == 1 || type == 2)  {
     waveInclination = small;
     amplitude = 1000;
-    Serial.println("SMALL WAVE");
+  Serial.print("SMALL WAVE: ");
+  Serial.println(amplitude);
   } else if (type == 3 || type == 4)  {
     waveInclination = medium;
     amplitude = 2000;
-    Serial.println("MEDIUM WAVE");
+  Serial.println("MEDIUM WAVE");
+  Serial.println(amplitude);
   } else if (type == 5 || type == 6)  {
     waveInclination = large;
     amplitude = 3000;
-    Serial.println("LARGE WAVE");
+  Serial.println("LARGE WAVE");
+  Serial.println(amplitude);
   } 
+  boardStatus();
 }
 
